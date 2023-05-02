@@ -60,6 +60,10 @@ class Cache:
     class NoCacheValue(Exception):
         pass
 
+    @property
+    def data(self)->dict:
+        return self.cache
+
     @if_cache_on(alt_exception=NoCacheValue())
     def get_value(self, obj:Any)->Any:
         _hash = self.get_hash(obj)
