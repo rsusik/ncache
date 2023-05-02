@@ -3,11 +3,19 @@ import pickle
 from typing import Any
 import os
 
-__version__ = 0.1
+__version__ = '0.2'
 
 class Cache:
-    def __init__(self, filename:str, nocache:bool=False):
+    def __init__(self, 
+        filename:str, 
+        nocache:bool=False, 
+        tmpfilename:str=None # if None no temp file is created
+    ):
         self.filename = filename
+        if tmpfilename is None:
+            self.tmpfilename = self.filename
+        else:
+            self.tmpfilename = tmpfilename
         self.nocache = nocache
         self.cache = {}
     
@@ -45,8 +53,9 @@ class Cache:
     
     @if_cache_on()
     def save_cache(self):
-        with open(self.filename, 'wb') as f:
-                pickle.dump(self.cache, f)
+        with open(self.tmpfilename, 'wb') as f:
+            pickle.dump(self.cache, f)
+            os.rename(self.tmpfilename, self.filename)
 
     class NoCacheValue(Exception):
         pass

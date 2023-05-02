@@ -9,7 +9,7 @@
 </a>
 </p>
 
-A simple and lightweight dictionary-based persistent cache for storing large objects.
+A simple and lightweight dictionary-based persistent cache for storing python objects.
 
 ## Installation:
 
@@ -19,7 +19,7 @@ pip install ncache
 
 ## Usage:
 
-```
+```python
 from ncache import Cache
 
 cache = Cache('my.cache')
@@ -37,4 +37,6 @@ except:
     cache.set_value(_hash, val)
     values += [val]
     print('Value added:', values)
+
+cache.save_cache()
 ```
