@@ -1,9 +1,10 @@
 import hashlib
 import pickle
+from pathlib import Path
 from typing import Any
 import os
 
-__version__ = '0.2'
+__version__ = '0.3'
 
 class Cache:
     def __init__(self, 
@@ -13,11 +14,17 @@ class Cache:
     ):
         self.filename = filename
         if tmpfilename is None:
-            self.tmpfilename = self.filename
-        else:
-            self.tmpfilename = tmpfilename
+            tmpfilename = Path(filename).parent / f'~{Path(filename).name}.tmp'
+        self.tmpfilename = tmpfilename
         self.nocache = nocache
         self.cache = {}
+
+        def check_path(path:str):
+            if Path(path).is_dir():
+                raise Exception(f'Error: The path "{path}" is a difectory')
+        for p in [self.filename, self.tmpfilename]:
+            check_path(p)
+        
     
     def if_cache_on(alt_exception=None, alt_value=None):
         def wrapper(fun):
